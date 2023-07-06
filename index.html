@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Long Polling Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body>
+    <h1>Long Polling Example</h1>
+    <div id="messages"></div>
+
+    <script>
+        // Function to send a request to the server
+        function longPolling() {
+            $.ajax({
+                type: 'GET',
+                url: 'http://localhost:3000', // Replace with your server-side script URL
+                dataType: 'json',
+                success: function (response) {
+                    // Handle the response from the server
+                    if (response && response.message) {
+                        // Display the received message
+                        $('#messages').append('<p>' + response.message + '</p>');
+                    }
+
+                    // Make the next long polling request
+                    longPolling();
+                },
+                error: function () {
+                    // Handle errors
+                    // Retry after a certain time or handle the error as required
+                    setTimeout(longPolling, 2000); // Retry after 2 seconds
+                }
+            });
+        }
+
+        // Start the initial long polling request
+        longPolling();
+    </script>
+</body>
+
+</html>
